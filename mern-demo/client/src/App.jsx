@@ -5,10 +5,10 @@ function App() {
   const [form, setForm] = useState({ studentId: '', name: '', email: '' });
   const [editId, setEditId] = useState(null);
 
-  // Lấy danh sách sinh viên (Câu 47, 59, 63)
+  // Lấy danh sách sinh viên
   const fetchStudents = async () => {
     try {
-      const res = await fetch('/api/students');
+      const res = await fetch('http://localhost:5000/api/students');
       const data = await res.json();
       setStudents(data);
     } catch (err) {
@@ -20,36 +20,30 @@ function App() {
     fetchStudents();
   }, []);
 
-  // Xử lý Thêm / Cập nhật sinh viên (Câu 49 & 61)
+  // Xử lý Thêm / Cập nhật sinh viên
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.studentId || !form.name || !form.email) return alert("Vui lòng nhập đủ thông tin");
 
-    if (editId) {
-      // Gọi API PUT để Sửa
-      await fetch(`/api/students/${editId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-      setEditId(null);
-    } else {
-      // Gọi API POST để Thêm
-      await fetch('/api/students', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      });
-    }
+    const url = editId 
+      ? `http://localhost:5000/api/students/${editId}` 
+      : 'http://localhost:5000/api/students';
 
+    await fetch(url, {
+      method: editId ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form)
+    });
+
+    setEditId(null);
     setForm({ studentId: '', name: '', email: '' });
     fetchStudents();
   };
 
-  // Gọi API DELETE để Xóa (Câu 62)
+  // Gọi API DELETE để Xóa
   const handleDelete = async (id) => {
     if (confirm("Bạn có chắc chắn muốn xóa sinh viên này?")) {
-      await fetch(`/api/students/${id}`, { method: 'DELETE' });
+      await fetch(`http://localhost:5000/api/students/${id}`, { method: 'DELETE' });
       fetchStudents();
     }
   };

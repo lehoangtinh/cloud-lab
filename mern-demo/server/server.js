@@ -6,8 +6,24 @@ const Student = require('./models/Student');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// --- CẤU HÌNH CORS CHO PHẦN 5 ---
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Kết nối MongoDB Atlas

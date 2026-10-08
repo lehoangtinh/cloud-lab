@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 
+// Khai báo API URL chính thức trên Render
+const API_URL = "https://mern-backend-1-1.onrender.com/api/students";
+
 function App() {
   const [students, setStudents] = useState([]);
   const [form, setForm] = useState({ studentId: '', name: '', email: '' });
@@ -8,7 +11,7 @@ function App() {
   // Lấy danh sách sinh viên
   const fetchStudents = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/students');
+      const res = await fetch(API_URL);
       const data = await res.json();
       setStudents(data);
     } catch (err) {
@@ -26,8 +29,8 @@ function App() {
     if (!form.studentId || !form.name || !form.email) return alert("Vui lòng nhập đủ thông tin");
 
     const url = editId 
-      ? `http://localhost:5000/api/students/${editId}` 
-      : 'http://localhost:5000/api/students';
+      ? `${API_URL}/${editId}` 
+      : API_URL;
 
     await fetch(url, {
       method: editId ? 'PUT' : 'POST',
@@ -43,7 +46,7 @@ function App() {
   // Gọi API DELETE để Xóa
   const handleDelete = async (id) => {
     if (confirm("Bạn có chắc chắn muốn xóa sinh viên này?")) {
-      await fetch(`http://localhost:5000/api/students/${id}`, { method: 'DELETE' });
+      await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
       fetchStudents();
     }
   };

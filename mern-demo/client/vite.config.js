@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: true,
     allowedHosts: [
-      'mern-frontend-2-0-axyj.onrender.com',
+      'mern-frontend-236412.onrender.com',
       'all'
     ]
   }
